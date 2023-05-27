@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 
 /**
@@ -23,7 +24,24 @@ public final class Constants {
   }
 
   public static class DriveConstants{
-    public static final double kPhysicalMaxSpeedMetersPerSecond = 11.5; // According to https://www.andymark.com/products/swerve-and-steer
+    // Need to verify - warning source of error. 
+    
+
+    // Actual Physical Robot Constraints:
+    // Drive Meters 11.5 ft to meters: ~3.5 meters per second.
+    public static final double kPhysicalMaxDriveSpeedMetersPerSecond = Units.feetToMeters(11.5); // According to https://www.andymark.com/products/swerve-and-steer
+    // Max speed: 1.5 Rotations per second * 2pi radians/one rotation
+    public static final double kPhysicalMaxTurningSpeedRadPerSecond = (90/60) * 2 * Math.PI; 
+
+    // Tele-Op Robot Constraints - change... it should be smaller than that. 
+    // Dividing by four = splitting up the total speed into each of the modules (?)
+    public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxDriveSpeedMetersPerSecond / 4;
+    public static final double kTeleDriveMaxTurningSpeedRadPerSecond = kPhysicalMaxTurningSpeedRadPerSecond / 4;
+
+    // Watch out for this. 
+    public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 2.75;
+    public static final double kTeleTurningMaxAccelerationUnitsPerSecond = 2.5;
+    
     
     // We need to update this
     public static final int frontLeftSparkPort = 0;

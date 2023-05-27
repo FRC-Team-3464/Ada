@@ -18,10 +18,10 @@ public class SwerveJoystickCmd extends CommandBase {
   private final SwerveSubsystem swerveSubsystem;
 
   private final SlewRateLimiter
-   xLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond),
-   yLimiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond),
+   xLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond),
+   yLimiter = new SlewRateLimiter(DriveConstants.kTeleDriveMaxAccelerationUnitsPerSecond),
   //  Change Turning Limiter
-  turningLImiter = new SlewRateLimiter(DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+  turningLImiter = new SlewRateLimiter(DriveConstants.kTeleTurningMaxAccelerationUnitsPerSecond);
   /*
   * One of the coolest things: Slew Rate Limiter for our joysticks: https://docs.wpilib.org/en/stable/docs/software/advanced-controls/filters/slew-rate-limiter.html  
   * Limits the rate of change of an output to a maximium rate of change. 

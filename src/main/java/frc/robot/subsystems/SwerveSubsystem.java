@@ -82,7 +82,7 @@ public class SwerveSubsystem extends SubsystemBase {
     * Make sure that if, we ask for a maximium speed from one of the modules, the others are proportianally lower - compared to having others being proportinally larger and thus exceed their limits too. 
     * Note that desaturateWheelSpeeds is the code replacement for normalize wheel speeds.
     */ 
-    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxSpeedMetersPerSecond);
+    SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond);
     // With a given array of swerve module states - forward/backward speeds and rotation requests - to each of the corresponding modules. 
     frontLeft.setDesiredState(desiredStates[0]);
     frontRight.setDesiredState(desiredStates[1]);
