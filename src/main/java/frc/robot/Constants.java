@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.XboxController;
 
@@ -24,9 +26,34 @@ public final class Constants {
   }
 
   public static class DriveConstants{
-    // Need to verify - warning source of error. 
-    
 
+
+    /*
+     * 
+     * VERIFY IN PERSON
+     *      
+    */
+
+    // Left and right wheel distance. 
+    public static final double kTrackWidth = Units.inchesToMeters(21);
+    // Front and Back Wheel distance. 
+    public static final double kWheelBase = Units.inchesToMeters(25.5); // More long than wide. 
+    public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
+
+    /*
+     * frontLeft.setDesiredState(desiredStates[0]);  - Mod 2 is front left. 
+     * frontRight.setDesiredState(desiredStates[1]);  - Mod 3 is front right. 
+     * backLeft.setDesiredState(desiredStates[2]);   - Mod 1 is back left
+     * backRight.setDesiredState(desiredStates[3]);  - Mod 0 is right back. 
+     */
+
+      new Translation2d(kWheelBase/2, -kTrackWidth/2), // Positition of mod 2 - front left
+      new Translation2d(kWheelBase/2, kTrackWidth/2), // Positition of mod 3 - front right
+      new Translation2d(-kWheelBase/2, -kTrackWidth/2), // Positition of mod 1 - back left
+      new Translation2d(-kWheelBase/2, kTrackWidth/2) // Positition of mod 0 - back right. 
+    );
+
+    // Need to verify - warning source of error. 
     // Actual Physical Robot Constraints:
     // Drive Meters 11.5 ft to meters: ~3.5 meters per second.
     public static final double kPhysicalMaxDriveSpeedMetersPerSecond = Units.feetToMeters(11.5); // According to https://www.andymark.com/products/swerve-and-steer
@@ -34,7 +61,7 @@ public final class Constants {
     public static final double kPhysicalMaxTurningSpeedRadPerSecond = (90/60) * 2 * Math.PI; 
 
     // Tele-Op Robot Constraints - change... it should be smaller than that. 
-    // Dividing by four = splitting up the total speed into each of the modules (?)
+    // Dividing by four = splitting up the total speed into each of the modules: used to ensure that our swerve isn't too fast. 
     public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxDriveSpeedMetersPerSecond / 4;
     public static final double kTeleDriveMaxTurningSpeedRadPerSecond = kPhysicalMaxTurningSpeedRadPerSecond / 4;
 
