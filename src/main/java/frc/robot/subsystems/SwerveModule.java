@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -25,11 +24,8 @@ public class SwerveModule {
     // private final boolean absoluteEncoderReversed; // Are we reversed. 
     // private final double absoluteEncoderOffsetRad; // Motor offset in Radians - probably not used. 
 
-
     private static final double turnEncoderRatio = (71/1); // Gear ratio for PG71 ~ 71
     private static final double wheelGearRatio = 0.25;
-
-
     private static final double turnMaxRPM = 75;
   
 
