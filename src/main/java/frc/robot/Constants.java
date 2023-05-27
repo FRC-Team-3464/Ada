@@ -16,4 +16,8 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+
+  public static class DriveConstants{
+    public static final double kPhysicalMaxSpeedMetersPerSecond = 11.5; // According to https://www.andymark.com/products/swerve-and-steer
+  }
 }

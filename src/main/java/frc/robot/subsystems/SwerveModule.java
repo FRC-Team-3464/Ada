@@ -1,11 +1,15 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants.DriveConstants;
 
 public class SwerveModule {
     private final Spark driveMotor; // Change to Spark
@@ -24,7 +28,6 @@ public class SwerveModule {
 
     private static final double turnEncoderRatio = (71/1); // Gear ratio for PG71 ~ 71
     private static final double wheelGearRatio = 0.25;
-
 
 
     private static final double turnMaxRPM = 75;
@@ -67,8 +70,30 @@ public class SwerveModule {
         turningMotor.setSelectedSensorPosition(0, 0,100);  // pidId 0 is simply the quadratic encoder - can be set with the phoenix tuner. 
     }
 
-    // // Create a rotation 2d that symbolizes the 2d rotation state of the wheel. 
-    // public Rotation2d rotationState(){
-    //     return new Rotation2d(get
-    // }
+    // Create a rotation 2d that symbolizes the 2d rotation state of the wheel. 
+    public Rotation2d rotationState(){
+        // We nmay need a drive encoder
+        return new Rotation2d(getTurningPosition());
+    }
+
+    public void setDesiredState(SwerveModuleState state){
+        //  Make sure that we're actually wanting to change the speed - if we're just letting go of the controller, we don't need to get to zero
+        if(Math.abs(state.speedMetersPerSecond) < 0.001){
+            // If the speed is too insignificant - don't bother
+            stopMotors();
+            return; // Exit function
+        }
+        state = SwerveModuleState.optimize(state, rotationState()); // Have the passed in state get translated so we now just need the shortest possible path for the wheel to rotate. 
+        driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxSpeedMetersPerSecond); // Give us a percentage speed for the spark to go to.  - Make sure it doesn't cross 1!
+        turningMotor.set(ControlMode.PercentOutput, turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));        
+        SmartDashboard.putString("Swerve[" + driveMotor.getChannel() + "] state:", state.toString()); // Give us the module debug info. . 
+    }
+
+    public void stopMotors(){
+        // driveMotor.set(0);
+        driveMotor.stopMotor();
+        turningMotor.set(ControlMode.PercentOutput, 0);
+    }
+
+
 }
