@@ -9,7 +9,6 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -59,7 +58,7 @@ public class SwerveJoystickCmd extends CommandBase {
     ChassisSpeeds chassisSpeeds;
     // Run chassis speeds based on field. 
     // Commented out: NOTE: from field relative means positive y => left of field, positive x => away from driver station. 
-    // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(ySpeed, -xSpeed, turningSpeed, swerveSubsystem.getRotation2d());
+    // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-ySpeed, xSpeed, turningSpeed, swerveSubsystem.getRotation2d());
     
     // Relative to robot.
     // X is forward velocity.
@@ -68,14 +67,16 @@ public class SwerveJoystickCmd extends CommandBase {
     // Convert the chassis speeds to the indvidual module states - starting from modules 0 to 3. 
     SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
 
-    // Apply that to each module. 
+    // Apply that to each module - starting in order of FL, FR, BL, BR. 
     swerveSubsystem.setModuleStates(moduleStates);
   }
 
 
 
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    swerveSubsystem.stopModeules();
+  }
 
   @Override
   public boolean isFinished() {
