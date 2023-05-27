@@ -19,5 +19,27 @@ public final class Constants {
 
   public static class DriveConstants{
     public static final double kPhysicalMaxSpeedMetersPerSecond = 11.5; // According to https://www.andymark.com/products/swerve-and-steer
+    
+    // We need to update this
+    public static final int frontLeftSparkPort = 0;
+    public static final int frontLeftTalonId = 0;
+    public static final boolean frontLeftDriveReversed = false;
+    public static final boolean frontLeftTurnReversed = false;
+  
+    public static final int frontRightSparkPort = 1;
+    public static final int frontRightTalonId = 1;
+    public static final boolean frontRightDriveReversed = false;
+    public static final boolean frontRightTurnReversed = false;
+  
+    public static final int backLeftSparkPort = 2;
+    public static final int backLeftTalonId = 2;
+    public static final boolean backLeftDriveReversed = false;
+    public static final boolean backLeftTurnReversed = false;
+  
+    public static final int backRightSparkPort = 3;
+    public static final int backRightTalonId = 3;
+    public static final boolean backRightDriveReversed = false;
+    public static final boolean backRightTurnReversed = false;
+  
   }
 }
