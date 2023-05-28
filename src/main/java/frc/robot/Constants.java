@@ -7,10 +7,8 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
+
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -21,6 +19,15 @@ import edu.wpi.first.wpilibj2.command.button.POVButton;
  * constants are needed, to reduce verbosity.
  */
 public final class Constants {
+
+  public static class ModuleConstants{
+
+    public static final double kTurnEncoderRatio = (7 * 71 * (48/40));
+
+    public static final double kTurningEncoderRot2Rad = kTurnEncoderRatio * 2 * Math.PI;
+    public static final double kTurningEncoderUnitP100ms2RadPerSec = kTurningEncoderRot2Rad * 10; // Talon SRX reads velocity in units/100ms. https://v5.docs.ctr-electronics.com/en/stable/ch14_MCSensor.html 
+  }
+
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 3;
 
@@ -72,7 +79,8 @@ public final class Constants {
     public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 2.75;
     public static final double kTeleTurningMaxAccelerationUnitsPerSecond = 2.5;
     
-    
+
+
     // We need to update this
     public static final int frontLeftSparkPort = 0;
     public static final int frontLeftTalonId = 0;
