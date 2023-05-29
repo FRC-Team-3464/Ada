@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -15,8 +16,10 @@ public class SwerveModule {
     private final Spark driveMotor; // Change to Spark
     private final TalonSRX turningMotor; // Change to Talon
 
+
     private final PIDController turningPidController; // Add a controller for our turning motor. 
-  
+    private final TalonSRXSimCollection simTurningMotor; // Create sim object
+    
     // Constructor where we update everything we need to create a module. 
     public SwerveModule(int SparkPort, int TalonId, boolean driveMotorReversed, boolean turningMotorReversed){
         // Define motors to be those we created with passed in ports. 
@@ -26,6 +29,8 @@ public class SwerveModule {
         // Set motors to be inversed if we told it to. 
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
+
+        simTurningMotor = turningMotor.getSimCollection(); // Add new sim object
     
         turningPidController = new PIDController(0.1, 0, 0); // Double check value. 
         turningPidController.enableContinuousInput(-Math.PI, Math.PI); // Basically controller moves to find the shortest path to a target in a circle - a circle's diameter is 2pi. 
