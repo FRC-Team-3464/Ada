@@ -94,7 +94,7 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // Send to Smartdashboard our heading constantly. 
-    SmartDashboard.getNumber("Robot Gyro Heading", getHeading()); // Could we try getting our rotation2D?
+    SmartDashboard.putNumber("Robot Gyro Heading", getHeading()); // Could we try getting our rotation2D?
     
   }
 }
