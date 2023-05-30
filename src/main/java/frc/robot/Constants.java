@@ -22,8 +22,8 @@ public final class Constants {
 
   // Constants related to individual swerve modules. 
   public static class ModuleConstants{
+    public static final double kPTurning = 0.255; 
     public static final double kTurnEncoderRatio = 1/1656.66667; // 7 * 71 * (40/48) * 4;
-
     public static final double kTurningEncoderRot2Rad = kTurnEncoderRatio * (2 * Math.PI); // Verified
     public static final double kTurningEncoderUnitP100ms2RadPerSec = kTurningEncoderRot2Rad * 10; // Talon SRX reads velocity in units/100ms. https://v5.docs.ctr-electronics.com/en/stable/ch14_MCSensor.html 
   }
@@ -37,33 +37,17 @@ public final class Constants {
 
   public static class DriveConstants{
 
-
-    /*
-     * 
-     * VERIFY IN PERSON
-     *      
-    */
-
     // Left and right wheel distance. 
     public static final double kTrackWidth = Units.inchesToMeters(21);
     // Front and Back Wheel distance. 
     public static final double kWheelBase = Units.inchesToMeters(25.5); // More long than wide. 
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
-
-    /*
-     * frontLeft.setDesiredState(desiredStates[0]);  - Mod 2 is front left.  1 
-     * frontRight.setDesiredState(desiredStates[1]);  - Mod 3 is front right. 3
-     * backLeft.setDesiredState(desiredStates[2]);   - Mod 1 is back left 2
-     * backRight.setDesiredState(desiredStates[3]);  - Mod 0 is right back. 0
-     */
-
       new Translation2d(kWheelBase/2, -kTrackWidth/2), // Positition of mod 2 - front left
       new Translation2d(kWheelBase/2, kTrackWidth/2), // Positition of mod 3 - front right
       new Translation2d(-kWheelBase/2, -kTrackWidth/2), // Positition of mod 1 - back left
       new Translation2d(-kWheelBase/2, kTrackWidth/2) // Positition of mod 0 - back right. 
     );
 
-    // Need to verify - warning source of error. 
     // Actual Physical Robot Constraints:
     // Drive Meters 11.5 ft to meters: ~3.5 meters per second.
     public static final double kPhysicalMaxDriveSpeedMetersPerSecond = Units.feetToMeters(11.5); // According to https://www.andymark.com/products/swerve-and-steer

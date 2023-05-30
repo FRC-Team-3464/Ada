@@ -13,6 +13,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.ModuleConstants;
 
 public class SwerveModule {
+
     private final Spark driveMotor; // Change to Spark
     private final TalonSRX turningMotor; // Change to Talon
 
@@ -30,75 +31,64 @@ public class SwerveModule {
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
-        // simTurningMotor = turningMotor.getSimCollection(); // Add new sim object
-    
-        // Note that Max Setpoint (90 degrees) is around 1.57... so multipled so far gives 15.7... probably not enough. 
-        turningPidController = new PIDController(0.1073, 0, 0); // Double check value. Video is 0.5 
-        // private final PIDController turnController = new PIDController(0.3373, 0, 0);
+        // Refine when testing. 
+        turningPidController = new PIDController(ModuleConstants.kPTurning, 0, 0); 
 
-        turningPidController.enableContinuousInput(-Math.PI, Math.PI); // Basically controller moves to find the shortest path to a target in a circle - a circle's diameter is 2pi. 
-        
-        // Will need to make that constant but can't use for the encoder. 
-        // turningMotor.getSelectedSenor.setPositionConversionFactor(ModuleConstants.kTurningEncoderRot2Rad);
-        // turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderRPM2RadPerSec);
+        // Tell the robot that the encoder is circuler -PI to PI. 
+        turningPidController.enableContinuousInput(-Math.PI, Math.PI);
 
         resetEncoders(); // Call our method to reset our encoder when we create the module. 
     };
-
-    public double getTurningPosition(){
-        // Return Talon Turning Position
-        // Gear RATIO IS WRONG
-        return (turningMotor.getSelectedSensorPosition(0) * ModuleConstants.kTurningEncoderRot2Rad); 
-    }
-
-    public double getTurningVelocity(){
-        // Return Talon Turning Position
-        // Gear RATIO IS WRONG
-        // pidId 0 is simply the quadratic encoder - can be set with the phoenix tuner. 
-
-        return (turningMotor.getSelectedSensorVelocity(0) * ModuleConstants.kTurningEncoderUnitP100ms2RadPerSec);    
-    }
 
     public void resetEncoders() {
         // NOTE: The ms means that the code will throw an error after desired ms - at 100 ms in this example. 
         turningMotor.setSelectedSensorPosition(0, 0,100);  // pidId 0 is simply the quadratic encoder - can be set with the phoenix tuner. 
     }
 
+
+    public double getTurningPosition(){
+        // Return Talon Turning Position in Rads
+        return (turningMotor.getSelectedSensorPosition(0) * ModuleConstants.kTurningEncoderRot2Rad); 
+    }
+
+    public double getTurningVelocity(){
+        // Return Talon Turning Position in Rads/Sec
+        // pidId 0 is simply the quadratic encoder - can be set with the phoenix tuner. 
+        return (turningMotor.getSelectedSensorVelocity(0) * ModuleConstants.kTurningEncoderUnitP100ms2RadPerSec);    
+    }
+
+
     // Create a rotation 2d that symbolizes the 2d rotation state of the wheel. 
-    public Rotation2d rotationState(){
-        // We nmay need a drive encoder
+    public Rotation2d getRotationState(){
         return new Rotation2d(getTurningPosition());
     }
 
+    // Actually move the modules. 
     public void setDesiredState(SwerveModuleState state){
-        //  Make sure that we're actually wanting to change the speed - if we're just letting go of the controller, we don't need to get to zero
+        //  Don't run this if the change is too small. 
         if(Math.abs(state.speedMetersPerSecond) < 0.001){
-            // If the speed is too insignificant - don't bother
             stopMotors();
             return; // Exit function
         }
-        state = SwerveModuleState.optimize(state, rotationState()); // Have the passed in state get translated so we now just need the shortest possible path for the wheel to rotate. 
+
+        // Find the shortest possible path for the wheel to rotate. 
+        state = SwerveModuleState.optimize(state, getRotationState()); 
+        // kPhysical ~ 3.5 m/s
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); // Give us a percentage speed for the spark to go to.  - Make sure it doesn't cross 1!
-        // System.out.println(null);
-
-        double turningSpeed = turningPidController.calculate(getTurningPosition(), state.angle.getRadians());
-        turningMotor.set(ControlMode.PercentOutput, turningSpeed > 1 ? 1.0 : turningSpeed); // If turning speed is greater than 1, set it to 1, if not, set to turning speed. 
-        turningSpeed =  turningSpeed > 1 ? 1.0 : turningSpeed;
-        // simTurningMotor.addQuadraturePosition(0)
-        // Shuffleboard.getTab("Smar")
         
-        // Simulation Support
-        // simTurningMotor.setBusVoltage(getTurningPosition());
+        double turningSpeed = turningPidController.calculate(getTurningPosition(), state.angle.getRadians());
+        // Limit the speed if past 100%, or 1. 
+        turningSpeed = turningSpeed > 1 ? 1.0 : turningSpeed;
+        turningMotor.set(ControlMode.PercentOutput, turningSpeed);  
 
+        // Add debug info. 
         SmartDashboard.putString("Swerve[" + driveMotor.getChannel() + "] state:", state.toString()); // Give us the module debug info. .
         SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Speed ", state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); 
         SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] turn", state.angle.getDegrees()); 
         SmartDashboard.putData("Swerve[" + driveMotor.getChannel() + "] PID Controller ", turningPidController); 
 
         SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Drive Input", state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); 
-        SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Turn Input", turningSpeed); 
-
-        
+        SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Turn Input", turningSpeed);         
     }
 
     public void stopMotors(){
