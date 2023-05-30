@@ -22,7 +22,7 @@ public final class Constants {
 
   public static class ModuleConstants{
 
-    public static final double kTurnEncoderRatio = (7 * 71 * (48/40));
+    public static final double kTurnEncoderRatio = (7 * 71 * (40/48)); // Should be units per rotation (71:1 * 40/48 gear reduction * 7 ticks per rotation) 
 
     public static final double kTurningEncoderRot2Rad = kTurnEncoderRatio * 2 * Math.PI;
     public static final double kTurningEncoderUnitP100ms2RadPerSec = kTurningEncoderRot2Rad * 10; // Talon SRX reads velocity in units/100ms. https://v5.docs.ctr-electronics.com/en/stable/ch14_MCSensor.html 

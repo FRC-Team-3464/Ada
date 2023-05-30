@@ -1,7 +1,6 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -18,7 +17,7 @@ public class SwerveModule {
 
 
     private final PIDController turningPidController; // Add a controller for our turning motor. 
-    private final TalonSRXSimCollection simTurningMotor; // Create sim object
+    // private final TalonSRXSimCollection simTurningMotor; // Create sim object
     
     // Constructor where we update everything we need to create a module. 
     public SwerveModule(int SparkPort, int TalonId, boolean driveMotorReversed, boolean turningMotorReversed){
@@ -30,7 +29,7 @@ public class SwerveModule {
         driveMotor.setInverted(driveMotorReversed);
         turningMotor.setInverted(turningMotorReversed);
 
-        simTurningMotor = turningMotor.getSimCollection(); // Add new sim object
+        // simTurningMotor = turningMotor.getSimCollection(); // Add new sim object
     
         turningPidController = new PIDController(0.1, 0, 0); // Double check value. 
         turningPidController.enableContinuousInput(-Math.PI, Math.PI); // Basically controller moves to find the shortest path to a target in a circle - a circle's diameter is 2pi. 
@@ -79,9 +78,13 @@ public class SwerveModule {
         turningMotor.set(ControlMode.PercentOutput, turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));        
         // Shuffleboard.getTab("Smar")
         
+        // Simulation Support
+        // simTurningMotor.setBusVoltage(getTurningPosition());
+
         SmartDashboard.putString("Swerve[" + driveMotor.getChannel() + "] state:", state.toString()); // Give us the module debug info. .
         SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] turn", state.angle.getDegrees()); 
-        SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] turn", state.angle.getDegrees()); 
+        SmartDashboard.putData("Swerve[" + driveMotor.getChannel() + "] PID Controller ", turningPidController); 
+
         SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Speed ", state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); 
         
     }
