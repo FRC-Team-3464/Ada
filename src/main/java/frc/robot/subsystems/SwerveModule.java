@@ -32,7 +32,9 @@ public class SwerveModule {
 
         // simTurningMotor = turningMotor.getSimCollection(); // Add new sim object
     
-        turningPidController = new PIDController(0.1, 0, 0); // Double check value. 
+        // Note that Max Setpoint (90 degrees) is around 1.57... so multipled so far gives 15.7... probably not enough. 
+        turningPidController = new PIDController(0.1, 0, 0); // Double check value. Video is 0.5 
+
         turningPidController.enableContinuousInput(-Math.PI, Math.PI); // Basically controller moves to find the shortest path to a target in a circle - a circle's diameter is 2pi. 
         
         // Will need to make that constant but can't use for the encoder. 
