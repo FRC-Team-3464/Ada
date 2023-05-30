@@ -22,7 +22,8 @@ public final class Constants {
 
   public static class ModuleConstants{
 
-    public static final double kTurnEncoderRatio = (7 * 71 * (40/48)); // Should be units per rotation (71:1 * 40/48 gear reduction * 7 ticks per rotation) 
+    public static final double kTurnEncoderRatio = 1656.66667; // 7 * 71 * (40/48) * 4;
+    // Should be units per rotation (71:1 * 40/48 gear reduction * 7 ticks per rotation) 
 
     public static final double kTurningEncoderRot2Rad = kTurnEncoderRatio * 2 * Math.PI;
     public static final double kTurningEncoderUnitP100ms2RadPerSec = kTurningEncoderRot2Rad * 10; // Talon SRX reads velocity in units/100ms. https://v5.docs.ctr-electronics.com/en/stable/ch14_MCSensor.html 
@@ -51,10 +52,10 @@ public final class Constants {
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
 
     /*
-     * frontLeft.setDesiredState(desiredStates[0]);  - Mod 2 is front left. 
-     * frontRight.setDesiredState(desiredStates[1]);  - Mod 3 is front right. 
-     * backLeft.setDesiredState(desiredStates[2]);   - Mod 1 is back left
-     * backRight.setDesiredState(desiredStates[3]);  - Mod 0 is right back. 
+     * frontLeft.setDesiredState(desiredStates[0]);  - Mod 2 is front left.  1 
+     * frontRight.setDesiredState(desiredStates[1]);  - Mod 3 is front right. 3
+     * backLeft.setDesiredState(desiredStates[2]);   - Mod 1 is back left 2
+     * backRight.setDesiredState(desiredStates[3]);  - Mod 0 is right back. 0
      */
 
       new Translation2d(kWheelBase/2, -kTrackWidth/2), // Positition of mod 2 - front left

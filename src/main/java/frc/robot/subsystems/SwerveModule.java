@@ -33,7 +33,8 @@ public class SwerveModule {
         // simTurningMotor = turningMotor.getSimCollection(); // Add new sim object
     
         // Note that Max Setpoint (90 degrees) is around 1.57... so multipled so far gives 15.7... probably not enough. 
-        turningPidController = new PIDController(0.1, 0, 0); // Double check value. Video is 0.5 
+        turningPidController = new PIDController(0.1073, 0, 0); // Double check value. Video is 0.5 
+        // private final PIDController turnController = new PIDController(0.3373, 0, 0);
 
         turningPidController.enableContinuousInput(-Math.PI, Math.PI); // Basically controller moves to find the shortest path to a target in a circle - a circle's diameter is 2pi. 
         
@@ -78,8 +79,11 @@ public class SwerveModule {
         }
         state = SwerveModuleState.optimize(state, rotationState()); // Have the passed in state get translated so we now just need the shortest possible path for the wheel to rotate. 
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); // Give us a percentage speed for the spark to go to.  - Make sure it doesn't cross 1!
-        turningMotor.set(ControlMode.PercentOutput, turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
-        
+        // System.out.println(null);
+
+        double turningSpeed = turningPidController.calculate(getTurningPosition(), state.angle.getRadians());
+        turningMotor.set(ControlMode.PercentOutput, turningSpeed > 1 ? 1.0 : turningSpeed); // If turning speed is greater than 1, set it to 1, if not, set to turning speed. 
+        turningSpeed =  turningSpeed > 1 ? 1.0 : turningSpeed;
         // simTurningMotor.addQuadraturePosition(0)
         // Shuffleboard.getTab("Smar")
         
@@ -87,10 +91,13 @@ public class SwerveModule {
         // simTurningMotor.setBusVoltage(getTurningPosition());
 
         SmartDashboard.putString("Swerve[" + driveMotor.getChannel() + "] state:", state.toString()); // Give us the module debug info. .
+        SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Speed ", state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); 
         SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] turn", state.angle.getDegrees()); 
         SmartDashboard.putData("Swerve[" + driveMotor.getChannel() + "] PID Controller ", turningPidController); 
 
-        SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Speed ", state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); 
+        SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Drive Input", state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); 
+        SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Turn Input", turningSpeed); 
+
         
     }
 
