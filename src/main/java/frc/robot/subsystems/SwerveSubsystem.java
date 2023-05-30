@@ -15,36 +15,37 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.DriveConstants;
 
 public class SwerveSubsystem extends SubsystemBase {
-  /** Creates a new SwerveSubsystem. */
+
+  /*  Define your four swerve module objects.  */
   public final SwerveModule frontLeft = new SwerveModule(
-    DriveConstants.frontLeftSparkPort,
-    DriveConstants.frontLeftTalonId,
-    DriveConstants.frontLeftDriveReversed,
-    DriveConstants.frontLeftTurnReversed
+    DriveConstants.frontLeftSparkPort, // 0
+    DriveConstants.frontLeftTalonId, // 0
+    DriveConstants.frontLeftDriveReversed, // True
+    DriveConstants.frontLeftTurnReversed // True 
   );
 
   public final SwerveModule frontRight = new SwerveModule(
-    DriveConstants.frontRightSparkPort,
-    DriveConstants.frontRightTalonId,
-    DriveConstants.frontRightDriveReversed,
-    DriveConstants.frontRightTurnReversed
+    DriveConstants.frontRightSparkPort, // 1
+    DriveConstants.frontRightTalonId, // 1
+    DriveConstants.frontRightDriveReversed, // False
+    DriveConstants.frontRightTurnReversed // True
   );
 
   public final SwerveModule backLeft = new SwerveModule(
-    DriveConstants.backLeftSparkPort,
-    DriveConstants.backLeftTalonId,
-    DriveConstants.backLeftDriveReversed,
-    DriveConstants.backLeftTurnReversed
+    DriveConstants.backLeftSparkPort, // 2
+    DriveConstants.backLeftTalonId, // 2 
+    DriveConstants.backLeftDriveReversed, // True
+    DriveConstants.backLeftTurnReversed // True
   );
 
   public final SwerveModule backRight = new SwerveModule(
-    DriveConstants.backRightSparkPort,
-    DriveConstants.backRightTalonId,
-    DriveConstants.backRightDriveReversed,
-    DriveConstants.backRightTurnReversed
+    DriveConstants.backRightSparkPort, // 3
+    DriveConstants.backRightTalonId, // 3 
+    DriveConstants.backRightDriveReversed, // False
+    DriveConstants.backRightTurnReversed // True
   );
     
-  private AHRS gyro = new AHRS(Port.kMXP); // Import our gyroscope
+  private AHRS gyro = new AHRS(Port.kMXP); // Create gyro on SPI port
 
   public SwerveSubsystem() {
     new Thread(() -> { // Create two parallel threads: one runs everything else while another one resets the gyro after one second. 
@@ -60,11 +61,14 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public double getHeading(){
-    // Get our heading to be between -180 and 180. 
-    return Math.IEEEremainder(gyro.getAngle(), 360); // How does this work? Supposed to clamp angle to between -180 to 180... I guess 360 is the full range of moation and we start at 0... 
+    /* Get our heading to be between -180 and 180. 
+     * Eqn = x - (y * Q), where Q is x/y rounded - so > 0.5 = 1, < 0.5 = 0. 
+     * https://learn.microsoft.com/en-us/dotnet/api/system.math.ieeeremainder?view=net-7.0
+    */
+    return Math.IEEEremainder(gyro.getAngle(), 360);
   }
 
-  public Rotation2d getRotation2d(){
+  public Rotation2d getGryoRotation2d(){
     // Need to look into what continuous and not continous means. 
     return Rotation2d.fromDegrees(getHeading()); // return a new rotation 2D based on the gyro heading. 
   }
@@ -82,19 +86,19 @@ public class SwerveSubsystem extends SubsystemBase {
     * Make sure that if, we ask for a maximium speed from one of the modules, the others are proportianally lower - compared to having others being proportinally larger and thus exceed their limits too. 
     * Note that desaturateWheelSpeeds is the code replacement for normalize wheel speeds.
     */ 
+    // kPhysicalMaxDriveSpeedMeterPerSecond is ~3.5 
     SwerveDriveKinematics.desaturateWheelSpeeds(desiredStates, DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond);
     // With a given array of swerve module states - forward/backward speeds and rotation requests - to each of the corresponding modules. 
     frontLeft.setDesiredState(desiredStates[0]);
     frontRight.setDesiredState(desiredStates[1]);
     backLeft.setDesiredState(desiredStates[2]);
     backRight.setDesiredState(desiredStates[3]);
-
   }
 
   @Override
   public void periodic() {
     // Send to Smartdashboard our heading constantly. 
-    SmartDashboard.putNumber("Robot Gyro Heading", getHeading()); // Could we try getting our rotation2D?
+    SmartDashboard.putNumber("Gyro Heading:", getHeading()); // Could we try getting our rotation2D?
     
   }
 }
