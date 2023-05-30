@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+// import com.ctre.phoenix.motorcontrol.TalonSRXSimCollection;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -75,7 +76,9 @@ public class SwerveModule {
         }
         state = SwerveModuleState.optimize(state, rotationState()); // Have the passed in state get translated so we now just need the shortest possible path for the wheel to rotate. 
         driveMotor.set(state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); // Give us a percentage speed for the spark to go to.  - Make sure it doesn't cross 1!
-        turningMotor.set(ControlMode.PercentOutput, turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));        
+        turningMotor.set(ControlMode.PercentOutput, turningPidController.calculate(getTurningPosition(), state.angle.getRadians()));
+        
+        // simTurningMotor.addQuadraturePosition(0)
         // Shuffleboard.getTab("Smar")
         
         // Simulation Support
