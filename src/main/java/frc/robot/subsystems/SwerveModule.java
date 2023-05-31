@@ -78,7 +78,7 @@ public class SwerveModule {
         
         double turningSpeed = turningPidController.calculate(getTurningPosition(), state.angle.getRadians());
         // Limit the speed if past 100%, or 1. 
-        turningSpeed = turningSpeed > 1 ? 1.0 : turningSpeed;
+        turningSpeed = Math.abs(turningSpeed) > 1 ? 1.0 : turningSpeed;
         turningMotor.set(ControlMode.PercentOutput, turningSpeed);  
 
         // Add debug info. 
@@ -86,6 +86,8 @@ public class SwerveModule {
         SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Speed ", state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); 
         SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] turn", state.angle.getDegrees()); 
         SmartDashboard.putData("Swerve[" + driveMotor.getChannel() + "] PID Controller ", turningPidController); 
+
+        // SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] State Speed: ", state.speedMetersPerSecond); 
 
         SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Drive Input", state.speedMetersPerSecond / DriveConstants.kPhysicalMaxDriveSpeedMetersPerSecond); 
         SmartDashboard.putNumber("Swerve[" + driveMotor.getChannel() + "] Turn Input", turningSpeed);         
