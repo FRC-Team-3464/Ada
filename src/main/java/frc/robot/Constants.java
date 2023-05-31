@@ -56,8 +56,8 @@ public final class Constants {
 
     // Tele-Op Robot Constraints - change... it should be smaller than that. 
     // Dividing by four = splitting up the total speed into each of the modules: used to ensure that our swerve isn't too fast. 
-    public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxDriveSpeedMetersPerSecond / 4;
-    public static final double kTeleDriveMaxTurningSpeedRadPerSecond = kPhysicalMaxTurningSpeedRadPerSecond / 4;
+    public static final double kTeleDriveMaxSpeedMetersPerSecond = kPhysicalMaxDriveSpeedMetersPerSecond / 2;
+    public static final double kTeleDriveMaxTurningSpeedRadPerSecond = kPhysicalMaxTurningSpeedRadPerSecond / 2;
 
     // Using comparative proportions, we get 3/5 = x/3.5
     public static final double kTeleDriveMaxAccelerationUnitsPerSecond = 2.1;
@@ -68,22 +68,22 @@ public final class Constants {
     // We need to update this
     public static final int frontLeftSparkPort = 0;
     public static final int frontLeftTalonId = 0;
-    public static final boolean frontLeftDriveReversed = true; // Will I need this?
+    public static final boolean frontLeftDriveReversed = false; // Will I need this?
     public static final boolean frontLeftTurnReversed = true;
   
     public static final int frontRightSparkPort = 1;
     public static final int frontRightTalonId = 1;
-    public static final boolean frontRightDriveReversed = false;
+    public static final boolean frontRightDriveReversed = true;
     public static final boolean frontRightTurnReversed = true;
   
     public static final int backLeftSparkPort = 2;
     public static final int backLeftTalonId = 2;
-    public static final boolean backLeftDriveReversed = true;
+    public static final boolean backLeftDriveReversed = false;
     public static final boolean backLeftTurnReversed = true;
   
     public static final int backRightSparkPort = 3;
     public static final int backRightTalonId = 3;
-    public static final boolean backRightDriveReversed = false;
+    public static final boolean backRightDriveReversed = true;
     public static final boolean backRightTurnReversed = true;
   
   }
