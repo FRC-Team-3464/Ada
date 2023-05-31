@@ -1,0 +1,30 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "navX-Sensor[0]": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  },
+  "NTProvider": {
+    "types": {
+      "/FMSInfo": "FMSInfo",
+      "/SmartDashboard/Swerve[0] PID Controller ": "PIDController",
+      "/SmartDashboard/Swerve[1] PID Controller ": "PIDController",
+      "/SmartDashboard/Swerve[2] PID Controller ": "PIDController",
+      "/SmartDashboard/Swerve[3] PID Controller ": "PIDController"
+    }
+  },
+  "NetworkTables": {
+    "transitory": {
+      "Shuffleboard": {
+        "open": true
+      }
+    }
+  },
+  "NetworkTables View": {
+    "visible": false
+  }
+}
