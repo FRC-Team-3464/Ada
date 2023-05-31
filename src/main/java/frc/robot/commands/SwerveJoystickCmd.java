@@ -39,10 +39,10 @@ public class SwerveJoystickCmd extends CommandBase {
 
   @Override
   public void execute() {
-    // Lets get the robot to move:
-    double xSpeed = xboxController.getLeftX();
-    double ySpeed = xboxController.getLeftY();
-    double turningSpeed = xboxController.getRightX(); // The turning function from right x-axis of xBox.
+    // Note that x and y speeds are reversed - on purpose. 
+    double xSpeed = xboxController.getLeftY();
+    double ySpeed = xboxController.getLeftX();
+    double turningSpeed = xboxController.getRightX(); 
 
     // Make sure that x,y, and turning speeds are greater than the deadband - if not, set the speed to zero. 
     xSpeed = Math.abs(xSpeed) > OperatorConstants.kXBoxControllerDeadband ? xSpeed : 0.0;
@@ -58,11 +58,11 @@ public class SwerveJoystickCmd extends CommandBase {
     ChassisSpeeds chassisSpeeds;
     // Run chassis speeds based on field. 
     // Commented out: NOTE: from field relative means positive y => left of field, positive x => away from driver station. 
-    // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-ySpeed, xSpeed, turningSpeed, swerveSubsystem.getRotation2d());
+    // chassisSpeeds = ChassisSpeeds.fromFieldRelativeSpeeds(-xSpeed, ySpeed, turningSpeed, swerveSubsystem.getRotation2d());
     
     // Relative to robot.
     // Seems to be reversed 
-    chassisSpeeds = new ChassisSpeeds(-ySpeed, xSpeed, turningSpeed);
+    chassisSpeeds = new ChassisSpeeds(-xSpeed, ySpeed, turningSpeed);
 
     // Convert the chassis speeds to the indvidual module states - starting from modules 0 to 3. 
     SwerveModuleState[] moduleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(chassisSpeeds);
